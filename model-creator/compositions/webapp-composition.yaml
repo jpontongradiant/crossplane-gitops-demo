@@ -21,14 +21,15 @@ spec:
       source: Inline
       inline:
         template: |
-          {{ range .observed.composite.resource.spec.parameters }}
+          {{ $params := .observed.composite.resource.spec.parameters }}
           ---
           apiVersion: kubernetes.crossplane.io/v1alpha2
           kind: Object
           metadata:
-            name: {{ .name }}-namespace
+            name: {{ $params.appName }}-namespace
             annotations:
-              crossplane.io/external-name: {{ .namespace }}
+              crossplane.io/external-name: {{ $params.namespace }}
+              gotemplating.fn.crossplane.io/composition-resource-name: {{ $params.appName }}-namespace
           spec:
             providerConfigRef:
               name: kubernetes-provider
@@ -37,12 +38,14 @@ spec:
                 apiVersion: v1
                 kind: Namespace
                 metadata:
-                  name: {{ .namespace }}
+                  name: {{ $params.namespace }}
           ---
           apiVersion: kubernetes.crossplane.io/v1alpha2
           kind: Object
           metadata:
-            name: {{ .name }}-configmap
+            name: {{ $params.appName }}-configmap
+            annotations:
+              gotemplating.fn.crossplane.io/composition-resource-name: {{ $params.appName }}-configmap
           spec:
             providerConfigRef:
               name: kubernetes-provider
@@ -51,14 +54,14 @@ spec:
                 apiVersion: v1
                 kind: ConfigMap
                 metadata:
-                  name: {{ .name }}-config
-                  namespace: {{ .namespace }}
+                  name: {{ $params.appName }}-config
+                  namespace: {{ $params.namespace }}
                 data:
                   index.html: |
                     <html>
                     <body>
                       <h1>Hello from Crossplane!</h1>
-                      <p>Application: {{ .name }}</p>
+                      <p>Application: {{ $params.appName }}</p>
                       <p>Managed by Crossplane GitOps Demo</p>
                     </body>
                     </html>
@@ -66,7 +69,9 @@ spec:
           apiVersion: kubernetes.crossplane.io/v1alpha2
           kind: Object
           metadata:
-            name: {{ .name }}-deployment
+            name: {{ $params.appName }}-deployment
+            annotations:
+              gotemplating.fn.crossplane.io/composition-resource-name: {{ $params.appName }}-deployment
           spec:
             providerConfigRef:
               name: kubernetes-provider
@@ -75,21 +80,21 @@ spec:
                 apiVersion: apps/v1
                 kind: Deployment
                 metadata:
-                  name: {{ .name }}
-                  namespace: {{ .namespace }}
+                  name: {{ $params.appName }}
+                  namespace: {{ $params.namespace }}
                 spec:
-                  replicas: {{ .replicas | default 2 }}
+                  replicas: {{ $params.replicas | default 2 }}
                   selector:
                     matchLabels:
-                      app: {{ .name }}
+                      app: {{ $params.appName }}
                   template:
                     metadata:
                       labels:
-                        app: {{ .name }}
+                        app: {{ $params.appName }}
                     spec:
                       containers:
                       - name: web
-                        image: {{ .image | default "nginx:1.21" }}
+                        image: {{ $params.image | default "nginx:1.21" }}
                         ports:
                         - containerPort: 80
                         volumeMounts:
@@ -98,12 +103,14 @@ spec:
                       volumes:
                       - name: html
                         configMap:
-                          name: {{ .name }}-config
+                          name: {{ $params.appName }}-config
           ---
           apiVersion: kubernetes.crossplane.io/v1alpha2
           kind: Object
           metadata:
-            name: {{ .name }}-service
+            name: {{ $params.appName }}-service
+            annotations:
+              gotemplating.fn.crossplane.io/composition-resource-name: {{ $params.appName }}-service
           spec:
             providerConfigRef:
               name: kubernetes-provider
@@ -112,13 +119,12 @@ spec:
                 apiVersion: v1
                 kind: Service
                 metadata:
-                  name: {{ .name }}
-                  namespace: {{ .namespace }}
+                  name: {{ $params.appName }}
+                  namespace: {{ $params.namespace }}
                 spec:
                   selector:
-                    app: {{ .name }}
+                    app: {{ $params.appName }}
                   ports:
                   - port: 80
                     targetPort: 80
                   type: ClusterIP
-          {{ end }}
