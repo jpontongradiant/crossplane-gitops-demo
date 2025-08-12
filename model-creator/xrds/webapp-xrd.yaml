@@ -1,0 +1,54 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xwebapps.platform.example.com
+spec:
+  group: platform.example.com
+  names:
+    kind: XWebApp
+    plural: xwebapps
+  claimNames:
+    kind: WebApp
+    plural: webapps
+  versions:
+  - name: v1alpha1
+    served: true
+    referenceable: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              parameters:
+                type: object
+                properties:
+                  appName:
+                    type: string
+                    description: Name of the web application
+                  replicas:
+                    type: integer
+                    description: Number of replicas
+                    default: 2
+                  image:
+                    type: string
+                    description: Container image
+                    default: "nginx:latest"
+                  namespace:
+                    type: string
+                    description: Target namespace
+                    default: "default"
+                required:
+                - appName
+            required:
+            - parameters
+          status:
+            type: object
+            properties:
+              conditions:
+                type: array
+                items:
+                  type: object
+              ready:
+                type: boolean
