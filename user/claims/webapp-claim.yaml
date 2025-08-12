@@ -1,0 +1,13 @@
+apiVersion: platform.example.com/v1alpha1
+kind: WebApp
+metadata:
+  name: my-webapp
+  namespace: default
+spec:
+  parameters:
+    appName: "demo-app"
+    replicas: 3
+    image: "nginx:1.21"
+    namespace: "webapp-demo"
+  compositionRef:
+    name: webapp-composition
