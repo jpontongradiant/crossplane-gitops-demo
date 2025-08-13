@@ -1,8 +1,8 @@
 apiVersion: platform.example.com/v1alpha1
-kind: WebApp
+kind: XWebApp  # Composite Resource directo (sin Claim)
 metadata:
-  name: my-webapp
-  namespace: default
+  name: my-webapp-xr
+  namespace: default  # XRs pueden estar en cualquier namespace
 spec:
   parameters:
     appName: "demo-app"

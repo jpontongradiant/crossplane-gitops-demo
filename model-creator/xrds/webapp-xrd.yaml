@@ -7,9 +7,7 @@ spec:
   names:
     kind: XWebApp
     plural: xwebapps
-  claimNames:
-    kind: WebApp
-    plural: webapps
+    # ⭐ No se definen claimNames - Claims opcionales desde v1.14+
   versions:
   - name: v1alpha1
     served: true
@@ -41,6 +39,29 @@ spec:
                     default: "default"
                 required:
                 - appName
+              compositionRef:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: The name of the Composition to use
+                required:
+                - name
+              compositionRevisionRef:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: The name of the CompositionRevision to use
+                required:
+                - name
+              compositionUpdatePolicy:
+                type: string
+                description: The policy for composition updates
+                enum:
+                - Automatic
+                - Manual
+                default: Automatic
             required:
             - parameters
           status:
