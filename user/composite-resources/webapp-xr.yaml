@@ -1,0 +1,13 @@
+apiVersion: platform.example.com/v1alpha1
+kind: XWebApp
+metadata:
+  name: my-webapp-xr
+  namespace: default
+spec:
+  parameters:
+    appName: "demo-app"
+    replicas: 4
+    image: "nginx:1.22"
+    namespace: "webapp-demo"
+  compositionRef:
+    name: webapp-composition
