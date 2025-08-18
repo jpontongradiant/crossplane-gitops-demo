@@ -7,7 +7,6 @@ spec:
   names:
     kind: XWebApp
     plural: xwebapps
-    # ⭐ No se definen claimNames - Claims opcionales desde v1.14+
   versions:
   - name: v1alpha1
     served: true
