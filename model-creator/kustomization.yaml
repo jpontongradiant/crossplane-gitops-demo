@@ -2,8 +2,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-- xrds/
-- compositions/
+- xrds/webapp-xrd.yaml
+- compositions/webapp-composition.yaml
 
 metadata:
   name: model-creator
