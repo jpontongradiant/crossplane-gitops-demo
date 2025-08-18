@@ -8,6 +8,6 @@ spec:
     appName: "demo-app"
     replicas: 3
     image: "nginx:1.21"
-    namespace: "webapp-demo2"
+    namespace: "webapp-demo"
   compositionRef:
     name: webapp-composition
