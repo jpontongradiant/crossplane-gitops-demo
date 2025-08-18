@@ -6,8 +6,8 @@ metadata:
 spec:
   parameters:
     appName: "demo-app"
-    replicas: 3
-    image: "nginx:1.21"
+    replicas: 4
+    image: "nginx:1.22"
     namespace: "webapp-demo"
   compositionRef:
     name: webapp-composition
