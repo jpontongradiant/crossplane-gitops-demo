@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- xrds/webapp-xrd-v2.yaml
+- compositions/webapp-composition-v2.yaml
+
+metadata:
+  name: model-creator
+  annotations:
+    config.kubernetes.io/local-config: "true"
+

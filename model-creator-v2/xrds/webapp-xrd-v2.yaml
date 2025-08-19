@@ -1,0 +1,101 @@
+apiVersion: apiextensions.crossplane.io/v2
+kind: CompositeResourceDefinition
+metadata:
+  name: xwebapps.platform.example.com
+spec:
+  scope: Namespaced  # NEW: Namespaced resources by default in v2
+  group: platform.example.com
+  names:
+    kind: XWebApp
+    plural: xwebapps
+  versions:
+  - name: v1alpha1
+    served: true
+    referenceable: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              parameters:
+                type: object
+                properties:
+                  appName:
+                    type: string
+                    description: Name of the web application
+                  replicas:
+                    type: integer
+                    description: Number of replicas
+                    default: 2
+                  image:
+                    type: string
+                    description: Container image
+                    default: "nginx:latest"
+                  namespace:
+                    type: string
+                    description: Target namespace
+                    default: "default"
+                required:
+                - appName
+              # NEW in v2: Crossplane machinery goes under spec.crossplane
+              crossplane:
+                type: object
+                properties:
+                  compositionRef:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                    required:
+                    - name
+                  compositionRevisionRef:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                    required:
+                    - name
+                  compositionUpdatePolicy:
+                    type: string
+                    enum:
+                    - Automatic
+                    - Manual
+                    default: Automatic
+                  resourceRefs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        apiVersion:
+                          type: string
+                        kind:
+                          type: string
+                        name:
+                          type: string
+                        namespace:
+                          type: string
+            required:
+            - parameters
+          status:
+            type: object
+            properties:
+              conditions:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                    status:
+                      type: string
+                    reason:
+                      type: string
+                    message:
+                      type: string
+                    lastTransitionTime:
+                      type: string
+                      format: date-time
+              ready:
+                type: boolean
