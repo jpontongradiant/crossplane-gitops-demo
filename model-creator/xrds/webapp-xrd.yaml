@@ -1,8 +1,9 @@
-apiVersion: apiextensions.crossplane.io/v1
+apiVersion: apiextensions.crossplane.io/v2
 kind: CompositeResourceDefinition
 metadata:
   name: xwebapps.platform.example.com
 spec:
+  scope: Namespaced
   group: platform.example.com
   names:
     kind: XWebApp
@@ -38,29 +39,42 @@ spec:
                     default: "default"
                 required:
                 - appName
-              compositionRef:
+              crossplane:
                 type: object
                 properties:
-                  name:
+                  compositionRef:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                    required:
+                    - name
+                  compositionRevisionRef:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                    required:
+                    - name
+                  compositionUpdatePolicy:
                     type: string
-                    description: The name of the Composition to use
-                required:
-                - name
-              compositionRevisionRef:
-                type: object
-                properties:
-                  name:
-                    type: string
-                    description: The name of the CompositionRevision to use
-                required:
-                - name
-              compositionUpdatePolicy:
-                type: string
-                description: The policy for composition updates
-                enum:
-                - Automatic
-                - Manual
-                default: Automatic
+                    enum:
+                    - Automatic
+                    - Manual
+                    default: Automatic
+                  resourceRefs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        apiVersion:
+                          type: string
+                        kind:
+                          type: string
+                        name:
+                          type: string
+                        namespace:
+                          type: string
             required:
             - parameters
           status:
@@ -70,5 +84,17 @@ spec:
                 type: array
                 items:
                   type: object
+                  properties:
+                    type:
+                      type: string
+                    status:
+                      type: string
+                    reason:
+                      type: string
+                    message:
+                      type: string
+                    lastTransitionTime:
+                      type: string
+                      format: date-time
               ready:
                 type: boolean

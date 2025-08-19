@@ -1,0 +1,9 @@
+apiVersion: kubernetes.crossplane.io/v1alpha1
+kind: ProviderConfig
+metadata:
+  name: kubernetes-provider
+  namespace: webapp-demo
+spec:
+  # For v2, use in-cluster configuration for namespaced resources
+  credentials:
+    source: InjectedIdentity
