@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
 - namespace.yaml
 - provider-config.yaml
-- composite-resources/webapp-xr-v2.yaml
+- composite-resources/helmapp-xr-v2.yaml
 
 metadata:
   name: user
