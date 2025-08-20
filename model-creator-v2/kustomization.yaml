@@ -2,8 +2,9 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-- xrds/helmapp-xrd-v2.yaml
-- compositions/helmapp-composition-v2.yaml
+- xrds/xrd.yaml
+- compositions/composition.yaml
+- functions/fn.yaml
 
 metadata:
   name: model-creator
