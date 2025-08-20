@@ -22,8 +22,12 @@ spec:
             image:
               description: The app's OCI container image.
               type: string
+            replicas:
+             description: Número de réplicas para la aplicación.
+             type: integer
           required:
           - image
+          - replicas
         status:
           type: object
           properties:

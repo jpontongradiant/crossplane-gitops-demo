@@ -20,7 +20,7 @@ spec:
           apiVersion: apps/v1
           kind: Deployment
           spec:
-            replicas: 2
+            replicas: 2 # valor por defecto, será parcheado
             template:
               spec:
                 containers:
@@ -40,6 +40,9 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.image
           toFieldPath: spec.template.spec.containers[0].image
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.replicas
+          toFieldPath: spec.replicas
         - type: ToCompositeFieldPath
           fromFieldPath: status.availableReplicas
           toFieldPath: status.replicas
