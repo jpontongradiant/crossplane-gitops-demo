@@ -5,4 +5,4 @@ metadata:
   name: my-app
 spec:
   image: nginx
-  replicas: 1
+  replicas: 3
